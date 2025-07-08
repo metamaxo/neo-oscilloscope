@@ -1,0 +1,19 @@
+{
+  "name": "neo-oscilloscope",
+  "version": "1.0.0",
+  "description": "A web-based oscilloscope visualizer",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "serve": "npx serve -s ."
+  },
+  "keywords": [
+    "oscilloscope",
+    "visualizer",
+    "audio",
+    "wasm"
+  ],
+  "author": "",
+  "license": "ISC",
+  "main": "index.js"
+}
