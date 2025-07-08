@@ -1,0 +1,205 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* general settingss */
+
+html {
+  background-color: black;
+  font-size: 14px;
+}
+
+body {
+  background-color: #121212;
+  color: white;
+  font-family: "Goldman";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: start;
+  font-size: 15px;
+  font-family: "Goldman";
+}
+
+.machine {
+  padding: 10px;
+  border: 10px outset #999999;
+  background-color: #8c8c8c;
+}
+
+.title {
+  margin-top: 100px;
+  color: #999999;
+  display: flex;
+  width: 1090px;
+  align-items: flex-start;
+}
+
+.layout {
+  display: flex;
+  gap: 5px;
+  margin-top: 0px;
+  align-items: flex-start;
+}
+
+/* visualisation canvas */
+
+#oscilloscope {
+  flex: 1;
+  width: 700px;
+  height: 700px;
+  background-color: black;
+  border: 8px inset #999999;
+}
+
+/* upload / download */
+
+.upload-download {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.button-wrapper {
+  position: relative;
+}
+
+.custom-button {
+  margin-top: 10px;
+  height: 30px;
+  width: 150px;
+  display: inline-block;
+  background-color: #8c8c8c;
+  color: #e6e6e6;
+  font-family: "Goldman";
+  border: 4px outset #999999;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+/* settings module */
+
+.outer-fieldset {
+  flex: 1;
+  align-items: center;
+  width: 300px;
+  height: 700px;
+  background-color: #8c8c8c;
+  border: 4px solid #8c8c8c;
+  font-family: "Goldman";
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.slider-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.slider-row label {
+  flex-shrink: 0;
+  width: 100px;
+  text-align: start;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex-grow: 1;
+  min-width: 0;
+  height: 5px;
+  background: black;
+  outline: none;
+  opacity: 1;
+  border-radius: 0px;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 4px solid #1a1a1a;
+  background: white;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 4px solid #1a1a1a;
+  background: white;
+  cursor: pointer;
+}
+
+.left-settings fieldset,
+.right-advanced {
+  background-color: #595959;
+  border: 8px inset #999999;
+  padding: 15px;
+  max-height: 635px;
+  overflow-y: auto;
+}
+
+.left-settings fieldset legend,
+.right-advanced legend {
+  color: white;
+  padding: 0 6px;
+  font-size: 1rem;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #1a1a1a;
+}
+
+input {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.container {
+  text-align: center;
+}
+
+/* Automation Module */
+
+#automationCanvas {
+  width: 1020px;
+  height: 130px;
+  margin-top: 20px;
+  align-items: center;
+  border: 4px inset #404040;
+  background-color: #090b09;
+  cursor: crosshair;
+}
+
+.automation-fieldset {
+  background-color: #595959;
+  margin-top: 5px;
+  width: 1055px;
+  align-items: center;
+  border: 8px inset #999999;
+}

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+    <title>neo-oscilloscope</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="styles/style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="title">
+      <h1>neo-oscilloscope version 1.0</h1>
+    </div>
+    <div class="machine">
+      <!-- Title -->
+
+      <div class="layout">
+        <!-- Visualizer -->
+        <canvas id="oscilloscope" width="600" height="600"></canvas>
+
+        <!-- Settings Panel -->
+        <fieldset class="outer-fieldset">
+          <div class="upload-download">
+            <!-- Upload -->
+            <div class="button-wrapper">
+              <label for="upload" class="custom-button"><b>upload</b></label>
+              <input type="file" id="upload" accept="audio/*, image/*" />
+            </div>
+
+            <!-- Download -->
+            <div class="button-wrapper">
+              <button id="downloadAudio" class="custom-button">
+                <b>download</b>
+              </button>
+            </div>
+          </div>
+
+          <!-- Flex container for layout -->
+          <div class="settings-flex">
+            <!-- LEFT: Draw mode + Style -->
+            <div class="left-settings">
+              <!-- Draw mode -->
+              <fieldset class="draw-mode-fieldset">
+                <b>mode</b>
+                <div>
+                  <label for="dots">neo-mode</label>
+                  <input
+                    type="radio"
+                    id="dots"
+                    name="drawmode"
+                    value="dots"
+                    checked
+                  />
+
+                  <label for="lines">classic-mode</label>
+                  <input
+                    type="radio"
+                    id="lines"
+                    name="drawmode"
+                    value="lines"
+                  />
+                </div>
+                <b>canvas settings</b>
+                <div class="slider-row">
+                  <label for="hueSlider">hue</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="360"
+                    value="140"
+                    class="slider"
+                    id="hueSlider"
+                  />
+                </div>
+                <div class="slider-row">
+                  <label for="scaleRange">scale</label>
+                  <input
+                    type="range"
+                    min="50"
+                    max="600"
+                    value="300"
+                    class="slider"
+                    step="4"
+                    id="scaleRange"
+                  />
+                </div>
+                <div class="slider-row">
+                  <label for="lineRange">stroke</label>
+                  <input
+                    type="range"
+                    min="0.2"
+                    max="5"
+                    value="1"
+                    step="0.2"
+                    class="slider"
+                    id="lineRange"
+                  />
+                </div>
+                <div class="slider-row">
+                  <label for="persistenceRange">decay</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="5"
+                    class="slider"
+                    id="persistenceRange"
+                  />
+                </div>
+                <div class="slider-row">
+                  <label for="freqRange">frequency</label>
+                  <input
+                    type="range"
+                    min="0.3"
+                    max="50"
+                    value="0.1"
+                    class="slider"
+                    id="freqRange"
+                    step="0.05"
+                  />
+                </div>
+                <div class="slider-row">
+                  <label for="imageOpacity">image opacity</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="slider"
+                    id="imageOpacity"
+                    step="1"
+                  />
+                </div>
+                <div class="slider-row">
+                  <label for="imageOpacity">noise level</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="slider"
+                    id="noiseLevel"
+                    step="1"
+                  />
+                </div>
+                <div class="slider-row">
+                  <label for="imageOpacity">noise spread</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="slider"
+                    id="noiseSpread"
+                    step="1"
+                  />
+                </div>
+                <b>image to audio settings</b>
+                <b>method:</b>
+                <select name="methods" id="methods">
+                  <option value="full">full contour</option>
+                  <option value="outline">outline</option>
+                  <option value="scan">scan line</option>
+                  <option value="snake">snake</option>
+                </select>
+
+                <label class="toggle">
+                  <input type="checkbox" id="edgeDetection" checked />
+                  edge detection
+                </label>
+
+                <div class="slider-row">
+                  <label for="threshold">threshold</label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="500"
+                    value="50"
+                    class="slider"
+                    id="threshold"
+                    step="1"
+                  />
+                </div>
+                <div class="slider-row">
+                  <label for="pixThreshold">pixel Threshold</label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="50"
+                    class="slider"
+                    id="pixThreshold"
+                    step="1"
+                  />
+                </div>
+                <div>
+                  <label for="repeat">repeat: </label>
+                  <input id="repeat" type="number" value="1" min="1" />
+                </div>
+                <div>
+                  <label for="intAmount">interpolate steps: </label>
+                  <input id="intAmount" type="number" value="20" min="0" />
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <!-- Automation -->
+      <fieldset class="automation-fieldset">
+        <div class="automation-container">
+          <label for="automationTarget">automate:</label>
+          <select id="automationTarget">
+            <option value="hue">hue</option>
+            <option value="scale">scale</option>
+            <option value="stroke">stroke</option>
+            <option value="persistence">decay</option>
+            <!-- Add more options as needed -->
+          </select>
+          <button id="clearCanvas" type="button">clear automation</button>
+          <label for="clipLength">clip length</label>
+          <input id="clipLength" type="number" value="10" />
+
+          <canvas id="automationCanvas" width="1020" height="130"></canvas>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Load JS -->
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>
