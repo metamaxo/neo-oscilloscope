@@ -70,7 +70,6 @@ impl RequestTrait for GetSettings {
         Box<dyn OperationTrait<State = Self::State>>,
         futures::channel::oneshot::Receiver<Self::Output>,
     ) {
-        log::info!("getting settings");
         let (tx, rx) = futures::channel::oneshot::channel();
 
         let op = Operation {

@@ -22,8 +22,3 @@ export function createAudioGraph(audioContext, buffer) {
 
   return { source, analyserL, analyserR };
 }
-
-export function changePlaybackSpeed(val) {
-  speed = val;
-  source.playbackRate.value = speed;
-}

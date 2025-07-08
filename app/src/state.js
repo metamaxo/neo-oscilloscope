@@ -2,17 +2,23 @@ import {
   startVisualization,
   stopVisualization,
 } from "./visualizerCanvas/visualizer.js";
-import { settings } from "./settings/settings.js";
 import { createAudioGraph } from "./nodes.js";
 import { toggleDownload } from "./fileHandling/download.js";
 import { wasmInterface } from "./wasm.js";
 import { startPlayhead, resetPlayhead } from "./automationCanvas/playhead.js";
+import { settings } from "./settings/settings.js";
 
 let audioBuffer = null;
 let animationId = null;
 let sourceNode = null;
 
 export const audioContext = new AudioContext();
+
+export function updateState(settings) {
+  if (sourceNode) {
+    sourceNode.playbackRate.value = settings.playbackRate;
+  }
+}
 
 export const state = {
   playing: false,
@@ -104,7 +110,7 @@ export async function startPlayback() {
 
   setTimeout(() => {
     stopPlayback();
-  }, settings.automation.clipLength * 1000);
+  }, settings.clipLength * 1000);
 }
 
 export function stopPlayback() {

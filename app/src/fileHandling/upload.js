@@ -6,6 +6,7 @@ const input = document.getElementById("upload");
 
 // Handle upload event.
 input.addEventListener("change", (event) => {
+  console.log("file uploaded");
   const file = event.target.files[0];
   if (!file) return;
   const type = file.type;

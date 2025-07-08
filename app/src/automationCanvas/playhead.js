@@ -15,7 +15,7 @@ export function resetPlayhead() {
 }
 
 export async function startPlayhead() {
-  const clipLength = settings.automation.clipLength;
+  const clipLength = settings.clipLength;
   const { width } = canvas;
   const duration = clipLength * 1000;
   const steps = duration / interval;

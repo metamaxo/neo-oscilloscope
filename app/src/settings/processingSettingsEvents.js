@@ -63,5 +63,5 @@ document
 
 const clipLength = document.getElementById("clipLength");
 clipLength.addEventListener("change", async (event) => {
-  await wasmInterface.set_clip_lengtu(parseInt(clipLength.value));
+  await wasmInterface.set_clip_length(parseInt(clipLength.value));
 });

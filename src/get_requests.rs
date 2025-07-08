@@ -124,8 +124,7 @@ impl JsInterface {
 
     #[wasm_bindgen]
     pub async fn get_settings_json(&mut self) -> Result<JsValue, JsValue> {
-        let settings = self.inner.settings(GetSettings).await.map_err(to_js)?;
-        Ok(to_value(&settings).unwrap())
+        Ok(to_value(&self.inner.settings(GetSettings).await.map_err(to_js)?).unwrap())
     }
 
     #[wasm_bindgen]

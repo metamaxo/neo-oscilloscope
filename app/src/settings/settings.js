@@ -1,18 +1,16 @@
-import { wasmInterface } from "../wasm.js";
-
 export const settings = {
   mode: "full",
   intAmount: 10,
   threshold: 50,
   pixThreshold: 50,
-  sample_rate: 44100,
-  edge_detecion: true,
+  sampleRate: 44100,
+  edgeDetecion: true,
   size: 300,
   repeat: 1,
 
-  loop_audio: true,
-  playback_rate: 1,
-  dot_mode: true,
+  loopAudio: true,
+  playbackRate: 1,
+  dotMode: true,
   scale: 300,
   stroke: 1,
   persistence: 0.05,
@@ -26,12 +24,5 @@ export const settings = {
 };
 
 export function updateColor() {
-  settings.style.lineColor = `hsl(${settings.style.hue}, 100%, 40%)`;
-}
-
-let interval = 50; // ms
-while (true) {
-  const newSettings = await wasmInterface.get_settings_json();
-  Object.assign(settings, newSettings);
-  await new Promise((r) => setTimeout(r, interval));
+  settings.lineColor = `hsl(${settings.hue}, 100%, 40%)`;
 }

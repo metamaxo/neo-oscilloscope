@@ -40,22 +40,21 @@ export function startVisualization(analyserL, analyserR, dataL, dataR) {
     analyserR.getFloatTimeDomainData(dataR);
 
     // Draw trailing effect
-    ctx.fillStyle = `rgba(0, 0, 0, ${1 - settings.style.persistence / 100})`;
+    ctx.fillStyle = `rgba(0, 0, 0, ${1 - settings.persistence / 100})`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Generate XY points from waveform data
     const points = wasmInterface.generate_points(
       dataL,
       dataR,
-      settings.style.scale,
-      settings.style.centerX,
-      settings.style.centerY,
-      settings.style.noise,
+      settings.scale,
+      settings.centerX,
+      settings.centerY,
     );
 
-    if (settings.style.drawMode === "dots") {
+    if (settings.dotMode) {
       updateColor();
-      ctx.fillStyle = settings.style.lineColor;
+      ctx.fillStyle = settings.lineColor;
       ctx.beginPath();
       for (let i = 0; i < points.length; i += 2) {
         const x = points[i];
@@ -63,13 +62,13 @@ export function startVisualization(analyserL, analyserR, dataL, dataR) {
         if (!shouldDraw(x, y)) continue;
 
         ctx.moveTo(x, y);
-        ctx.arc(x, y, settings.style.stroke, 0, Math.PI * 2);
+        ctx.arc(x, y, settings.stroke, 0, Math.PI * 2);
       }
       ctx.fill();
     } else {
       updateColor();
-      ctx.strokeStyle = settings.style.lineColor;
-      ctx.lineWidth = settings.style.stroke;
+      ctx.strokeStyle = settings.lineColor;
+      ctx.lineWidth = settings.stroke;
       ctx.beginPath();
       ctx.moveTo(points[0], points[1]);
       for (let i = 2; i < points.length; i += 2) {
@@ -81,7 +80,7 @@ export function startVisualization(analyserL, analyserR, dataL, dataR) {
 }
 
 function shouldDraw(x, y) {
-  const opacity = settings.style.imageOpacity;
+  const opacity = settings.imageOpacity;
 
   // Always draw if slider is 0
   if (opacity === 0) return true;

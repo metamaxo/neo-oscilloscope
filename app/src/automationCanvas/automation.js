@@ -47,13 +47,13 @@ export function getCurrentSettingValue(setting) {
   const height = canvas.height;
   switch (setting) {
     case "persistence":
-      return height * (1 - settings.style.persistence / 99);
+      return height * (1 - settings.persistence / 99);
     case "hue":
-      return height * (1 - settings.style.hue / 360);
+      return height * (1 - settings.hue / 360);
     case "scale":
-      return height * (1 - (settings.style.scale - 50) / 300);
+      return height * (1 - (settings.scale - 50) / 300);
     case "stroke":
-      return height * (1 - (settings.style.stroke - 1) / 4);
+      return height * (1 - (settings.stroke - 1) / 4);
     default:
       return height / 2;
   }
