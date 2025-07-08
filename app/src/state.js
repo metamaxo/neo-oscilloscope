@@ -1,14 +1,18 @@
-import { startVisualization, stopVisualization } from "./visualizer.js";
-import { settings } from "./settings.js";
+import {
+  startVisualization,
+  stopVisualization,
+} from "./visualizerCanvas/visualizer.js";
+import { settings } from "./settings/settings.js";
 import { createAudioGraph } from "./nodes.js";
-import { toggleDownload } from "./tools.js";
+import { toggleDownload } from "./fileHandling/download.js";
 import { wasmInterface } from "./wasm.js";
 import { startPlayhead, resetPlayhead } from "./automationCanvas/playhead.js";
 
-export const audioContext = new AudioContext();
 let audioBuffer = null;
 let animationId = null;
 let sourceNode = null;
+
+export const audioContext = new AudioContext();
 
 export const state = {
   playing: false,

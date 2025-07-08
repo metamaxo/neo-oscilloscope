@@ -1,8 +1,9 @@
+use serde::Serialize;
 use std::convert::TryFrom;
 
 /// Mode enum
 /// Capture the different modes that can be used
-#[derive(Default, Clone, Copy, Debug)]
+#[derive(Default, Clone, Copy, Debug, Serialize)]
 pub enum Mode {
     Outline,
     #[default]

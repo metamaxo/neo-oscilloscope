@@ -1,5 +1,5 @@
-import { wasmInterface } from "./wasm.js";
-import { setBlackPoints } from "./visualizer.js";
+import { wasmInterface } from "../wasm.js";
+import { setBlackPoints } from "../visualizerCanvas/visualizer.js";
 /// Uploads can be either audio or image files. Depending on the file type,
 /// we process the upload and send it to the backend.
 const input = document.getElementById("upload");

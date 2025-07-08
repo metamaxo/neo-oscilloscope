@@ -53,7 +53,6 @@ where
     CoordsToAudioRequest {
         coords,
         sample_rate: settings.sample_rate,
-        duration_secs: settings.duration_secs,
         playback_rate: settings.playback_rate,
         result: Vec::new(),
     }

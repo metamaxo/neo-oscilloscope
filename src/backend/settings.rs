@@ -1,20 +1,34 @@
-// settings.rs
 use crate::image_to_coords::mode::Mode;
 use crate::traits::{Operation, OperationTrait, RequestTrait};
 use anyhow::Result;
+use serde::Serialize;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Settings {
+    // Processing
     pub mode: Mode,
     pub int_amount: usize,
     pub threshold: u8,
     pub pix_threshold: u32,
     pub sample_rate: u32,
-    pub duration_secs: u32,
+    pub edge_detection: bool,
+    pub size: u32,
+    // Front end
+    pub loop_audio: bool,
     pub repeat: u32,
     pub playback_rate: f32,
-    pub size: u32,
-    pub edge_detection: bool,
+    pub dot_mode: bool,
+    pub scale: f64,
+    pub stroke: f64,
+    pub line_color: String,
+    pub persistence: f64,
+    pub hue: f64,
+    pub image_opacity: f64,
+    pub noise: f64,
+    pub centerx: f64,
+    pub centery: f64,
+    pub clip_length: f64,
 }
 
 impl Default for Settings {
@@ -25,12 +39,46 @@ impl Default for Settings {
             threshold: 20,
             pix_threshold: 20,
             sample_rate: 44100,
-            duration_secs: 20,
             repeat: 1,
+            loop_audio: true,
             playback_rate: 1.0,
             size: 600,
             edge_detection: true,
+            line_color: String::from("#000000"),
+            dot_mode: true,
+            scale: 300.0,
+            stroke: 1.0,
+            persistence: 0.05,
+            hue: 140.0,
+            image_opacity: 0.0,
+            noise: 0.0,
+            centerx: 300.0,
+            centery: 300.0,
+            clip_length: 10.0,
         }
+    }
+}
+pub struct GetSettings;
+
+impl RequestTrait for GetSettings {
+    type State = Settings;
+    type Output = Settings;
+
+    fn into_operation(
+        self,
+    ) -> (
+        Box<dyn OperationTrait<State = Self::State>>,
+        futures::channel::oneshot::Receiver<Self::Output>,
+    ) {
+        log::info!("getting settings");
+        let (tx, rx) = futures::channel::oneshot::channel();
+
+        let op = Operation {
+            handler: Box::new(|settings: &mut Settings| settings.clone()),
+            sender: tx,
+        };
+
+        (Box::new(op), rx)
     }
 }
 
@@ -135,11 +183,20 @@ define_setting_requests! {
     threshold: u8,
     pix_threshold: u32,
     sample_rate: u32,
-    duration_secs: u32,
     repeat: u32,
     playback_rate: f32,
     edge_detection: bool,
     size: u32,
+    dot_mode: bool,
+    scale: f64,
+    stroke: f64,
+    persistence: f64,
+    hue: f64,
+    image_opacity: f64,
+    noise: f64,
+    centerx: f64,
+    centery: f64,
+    clip_length: f64,
 }
 
 impl Settings {

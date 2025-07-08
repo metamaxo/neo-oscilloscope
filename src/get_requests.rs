@@ -2,6 +2,7 @@ use crate::JsInterface;
 use crate::backend::settings::*;
 use crate::backend::state;
 use crate::to_js;
+use serde_wasm_bindgen::to_value;
 
 use log::info;
 use std::sync::Arc;
@@ -38,13 +39,6 @@ impl JsInterface {
     }
 
     #[wasm_bindgen]
-    pub async fn get_duration_secs(&mut self) -> Result<JsValue, JsValue> {
-        Ok(JsValue::from(
-            self.inner.settings(GetDurationSecs).await.map_err(to_js)? as f64,
-        ))
-    }
-
-    #[wasm_bindgen]
     pub async fn get_repeat(&mut self) -> Result<JsValue, JsValue> {
         Ok(JsValue::from(
             self.inner.settings(GetRepeat).await.map_err(to_js)? as f64,
@@ -56,6 +50,82 @@ impl JsInterface {
         Ok(JsValue::from(
             self.inner.settings(GetPlaybackRate).await.map_err(to_js)? as f64,
         ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_dot_mode(&mut self) -> Result<JsValue, JsValue> {
+        Ok(JsValue::from(
+            self.inner.settings(GetDotMode).await.map_err(to_js)?,
+        ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_scale(&mut self) -> Result<JsValue, JsValue> {
+        Ok(JsValue::from(
+            self.inner.settings(GetScale).await.map_err(to_js)? as f64,
+        ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_stroke(&mut self) -> Result<JsValue, JsValue> {
+        Ok(JsValue::from(
+            self.inner.settings(GetStroke).await.map_err(to_js)? as f64,
+        ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_persistence(&mut self) -> Result<JsValue, JsValue> {
+        Ok(JsValue::from(
+            self.inner.settings(GetPersistence).await.map_err(to_js)? as f64,
+        ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_hue(&mut self) -> Result<JsValue, JsValue> {
+        Ok(JsValue::from(
+            self.inner.settings(GetHue).await.map_err(to_js)? as f64,
+        ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_image_opacity(&mut self) -> Result<JsValue, JsValue> {
+        Ok(JsValue::from(
+            self.inner.settings(GetImageOpacity).await.map_err(to_js)? as f64,
+        ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_noise(&mut self) -> Result<JsValue, JsValue> {
+        Ok(JsValue::from(
+            self.inner.settings(GetNoise).await.map_err(to_js)? as f64,
+        ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_center_x(&mut self) -> Result<JsValue, JsValue> {
+        Ok(JsValue::from(
+            self.inner.settings(GetCenterx).await.map_err(to_js)? as f64,
+        ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_center_y(&mut self) -> Result<JsValue, JsValue> {
+        Ok(JsValue::from(
+            self.inner.settings(GetCentery).await.map_err(to_js)? as f64,
+        ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_clip_length(&mut self) -> Result<JsValue, JsValue> {
+        Ok(JsValue::from(
+            self.inner.settings(GetClipLength).await.map_err(to_js)? as f64,
+        ))
+    }
+
+    #[wasm_bindgen]
+    pub async fn get_settings_json(&mut self) -> Result<JsValue, JsValue> {
+        let settings = self.inner.settings(GetSettings).await.map_err(to_js)?;
+        Ok(to_value(&settings).unwrap())
     }
 
     #[wasm_bindgen]

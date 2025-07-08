@@ -1,8 +1,7 @@
 import { setupWasm } from "./wasm.js";
-import "./settings.js";
-import "./handleUpload.js";
-import "./visualizer.js";
-import "./events.js";
-import "./automationCanvas/init.js";
 
 setupWasm();
+import "./fileHandling/init.js";
+import "./visualizerCanvas/init.js";
+import "./automationCanvas/init.js";
+import "./settings/init.js";

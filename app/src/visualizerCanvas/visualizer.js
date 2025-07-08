@@ -1,7 +1,7 @@
-import { clearAnimation, getSourceNode, setAnimationId } from "./state.js";
+import { clearAnimation, getSourceNode, setAnimationId } from "../state.js";
 import { ctx, canvas } from "./canvas.js";
-import { updateColor, settings } from "./settings.js";
-import { wasmInterface } from "./wasm.js";
+import { updateColor, settings } from "../settings/settings.js";
+import { wasmInterface } from "../wasm.js";
 const blackPointSet = new Set();
 
 export function setBlackPoints(points) {
@@ -43,17 +43,13 @@ export function startVisualization(analyserL, analyserR, dataL, dataR) {
     ctx.fillStyle = `rgba(0, 0, 0, ${1 - settings.style.persistence / 100})`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Calculate canvas center
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-
     // Generate XY points from waveform data
     const points = wasmInterface.generate_points(
       dataL,
       dataR,
       settings.style.scale,
-      centerX,
-      centerY,
+      settings.style.centerX,
+      settings.style.centerY,
       settings.style.noise,
     );
 

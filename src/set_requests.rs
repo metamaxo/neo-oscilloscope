@@ -67,18 +67,6 @@ impl JsInterface {
     }
 
     #[wasm_bindgen]
-    pub async fn set_duration_secs(&mut self, value: JsValue) -> Result<(), JsValue> {
-        self.inner
-            .settings(SetDurationSecs(
-                value
-                    .as_f64()
-                    .ok_or_else(|| JsValue::from_str("Expected a number"))? as u32,
-            ))
-            .await
-            .map_err(to_js)?;
-        Ok(())
-    }
-    #[wasm_bindgen]
     pub async fn set_repeat(&mut self, value: JsValue) -> Result<(), JsValue> {
         self.inner
             .settings(SetRepeat(
@@ -118,6 +106,141 @@ impl JsInterface {
             .settings(SetEdgeDetection(value))
             .await
             .map_err(to_js)?;
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_dot_mode(&mut self, value: bool) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetDotMode(value))
+            .await
+            .map_err(to_js)?;
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_scale(&mut self, value: JsValue) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetScale(
+                value
+                    .as_f64()
+                    .ok_or_else(|| JsValue::from_str("ecpected a number"))?,
+            ))
+            .await
+            .map_err(to_js)?;
+        info!("scale set to: {}", value.as_f64().unwrap());
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_stroke(&mut self, value: JsValue) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetStroke(
+                value
+                    .as_f64()
+                    .ok_or_else(|| JsValue::from_str("ecpected a number"))?,
+            ))
+            .await
+            .map_err(to_js)?;
+        info!("stroke set to: {}", value.as_f64().unwrap());
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_persistence(&mut self, value: JsValue) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetPersistence(
+                value
+                    .as_f64()
+                    .ok_or_else(|| JsValue::from_str("ecpected a number"))?,
+            ))
+            .await
+            .map_err(to_js)?;
+        info!("persistence set to: {}", value.as_f64().unwrap());
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_hue(&mut self, value: JsValue) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetHue(
+                value
+                    .as_f64()
+                    .ok_or_else(|| JsValue::from_str("ecpected a number"))?,
+            ))
+            .await
+            .map_err(to_js)?;
+        info!("hue set to: {}", value.as_f64().unwrap());
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_image_opacity(&mut self, value: JsValue) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetImageOpacity(
+                value
+                    .as_f64()
+                    .ok_or_else(|| JsValue::from_str("ecpected a number"))?,
+            ))
+            .await
+            .map_err(to_js)?;
+        info!("image_opacity set to: {}", value.as_f64().unwrap());
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_noise(&mut self, value: JsValue) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetNoise(
+                value
+                    .as_f64()
+                    .ok_or_else(|| JsValue::from_str("ecpected a number"))?,
+            ))
+            .await
+            .map_err(to_js)?;
+        info!("noise set to: {}", value.as_f64().unwrap());
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_center_x(&mut self, value: JsValue) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetCenterx(
+                value
+                    .as_f64()
+                    .ok_or_else(|| JsValue::from_str("ecpected a number"))?,
+            ))
+            .await
+            .map_err(to_js)?;
+        info!("centerx set to: {}", value.as_f64().unwrap());
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_center_y(&mut self, value: JsValue) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetCentery(
+                value
+                    .as_f64()
+                    .ok_or_else(|| JsValue::from_str("ecpected a number"))?,
+            ))
+            .await
+            .map_err(to_js)?;
+        info!("centery set to: {}", value.as_f64().unwrap());
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_clip_length(&mut self, value: JsValue) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetClipLength(
+                value
+                    .as_f64()
+                    .ok_or_else(|| JsValue::from_str("ecpected a number"))?,
+            ))
+            .await
+            .map_err(to_js)?;
+        info!("clip_length set to: {}", value.as_f64().unwrap());
         Ok(())
     }
 

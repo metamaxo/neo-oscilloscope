@@ -4,7 +4,6 @@ use std::io::Cursor;
 pub struct Request<C: std::ops::Deref<Target = Vec<(f32, f32)>>> {
     pub coords: C,
     pub sample_rate: u32,
-    pub duration_secs: u32,
     pub playback_rate: f32,
     pub result: Vec<u8>,
 }

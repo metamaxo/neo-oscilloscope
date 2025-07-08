@@ -75,6 +75,7 @@
                     value="140"
                     class="slider"
                     id="hueSlider"
+                    autocomplete="off"
                   />
                 </div>
                 <div class="slider-row">
@@ -87,6 +88,7 @@
                     class="slider"
                     step="4"
                     id="scaleRange"
+                    autocomplete="off"
                   />
                 </div>
                 <div class="slider-row">
@@ -99,6 +101,7 @@
                     step="0.2"
                     class="slider"
                     id="lineRange"
+                    autocomplete="off"
                   />
                 </div>
                 <div class="slider-row">
@@ -110,6 +113,7 @@
                     value="5"
                     class="slider"
                     id="persistenceRange"
+                    autocomplete="off"
                   />
                 </div>
                 <div class="slider-row">
@@ -122,6 +126,7 @@
                     class="slider"
                     id="freqRange"
                     step="0.05"
+                    autocomplete="off"
                   />
                 </div>
                 <div class="slider-row">
@@ -132,32 +137,35 @@
                     max="100"
                     value="0"
                     class="slider"
-                    id="imageOpacity"
+                    id="imageOp"
                     step="1"
+                    autocomplete="off"
                   />
                 </div>
                 <div class="slider-row">
-                  <label for="imageOpacity">noise level</label>
+                  <label for="center x">center x</label>
                   <input
                     type="range"
                     min="0"
-                    max="100"
-                    value="0"
+                    max="600"
+                    value="300"
                     class="slider"
-                    id="noiseLevel"
+                    id="centerX"
                     step="1"
+                    autocomplete="off"
                   />
                 </div>
                 <div class="slider-row">
-                  <label for="imageOpacity">noise spread</label>
+                  <label for="centery">center y</label>
                   <input
                     type="range"
                     min="0"
-                    max="100"
-                    value="0"
+                    max="600"
+                    value="300"
                     class="slider"
-                    id="noiseSpread"
+                    id="centerY"
                     step="1"
+                    autocomplete="off"
                   />
                 </div>
                 <b>image to audio settings</b>
@@ -184,6 +192,7 @@
                     class="slider"
                     id="threshold"
                     step="1"
+                    autocomplete="off"
                   />
                 </div>
                 <div class="slider-row">
@@ -196,6 +205,7 @@
                     class="slider"
                     id="pixThreshold"
                     step="1"
+                    autocomplete="off"
                   />
                 </div>
                 <div>
@@ -204,7 +214,7 @@
                 </div>
                 <div>
                   <label for="intAmount">interpolate steps: </label>
-                  <input id="intAmount" type="number" value="20" min="0" />
+                  <input id="intAmount" type="number" value="5" min="0" />
                 </div>
               </fieldset>
             </div>

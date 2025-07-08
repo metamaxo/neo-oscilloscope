@@ -13,76 +13,87 @@ import {
   getCurrentValue,
 } from "./automation.js";
 
-let draggingPoint = null;
+let dragging = null; // { type: 'anchor' | 'control', segmentIndex: number, pointIndex: 0 | 1 }
 
-// Select automation setting
-settingSelect.addEventListener("input", (e) => {
+settingSelect.addEventListener("input", () => {
   setCurrentValue(settingSelect.value);
 });
 
-// clear entire canvas
 clearCanvasButton.addEventListener("click", () => {
   resetAutomation();
 });
 
-// prevent default context menu
 canvas.addEventListener("contextmenu", (e) => {
   e.preventDefault();
 });
 
-// left click adds point, right click removes
 canvas.addEventListener("mousedown", (e) => {
-  let automationData = getAutomationData();
-  let currentValue = getCurrentValue();
+  const automationData = getAutomationData();
+  const currentValue = getCurrentValue();
+  const segments = automationData[currentValue];
   const [x, y] = getCanvasCoords(e);
-  const points = automationData[currentValue];
 
   if (e.button === 0) {
-    // Left-click: add or drag
-    for (let i = 0; i < points.length; i++) {
-      const [px, py] = points[i];
-      if (Math.hypot(px - x, py - y) < pointRadius + 10) {
-        draggingPoint = { index: i };
+    // Drag existing point or control
+    for (let i = 0; i < segments.length; i++) {
+      const { point, control } = segments[i];
+      if (distance(point, [x, y]) < pointRadius + 5) {
+        dragging = { type: "anchor", segmentIndex: i };
+        return;
+      }
+      if (control && distance(control, [x, y]) < pointRadius + 5) {
+        dragging = { type: "control", segmentIndex: i };
         return;
       }
     }
 
-    const hasStart = points.some((point) => point[0] <= 1);
-    if (!hasStart) {
-      const yStart = getCurrentSettingValue(currentValue, window.settings);
-      points.push([0, yStart]);
-    }
-
-    points.push([x, y]);
-    points.sort((a, b) => a[0] - b[0]);
+    // Add new point
+    const newPoint = [x, y];
+    segments.push({ point: newPoint });
+    segments.sort((a, b) => a.point[0] - b.point[0]);
   }
 
   if (e.button === 2) {
-    // Right-click: remove
+    // Right-click to remove point
     e.preventDefault();
-    for (let i = 0; i < points.length; i++) {
-      const [px2, py2] = points[i];
-      if (Math.hypot(px2 - x, py2 - y) < pointRadius + 10) {
-        points.splice(i, 1);
-        break;
+    for (let i = 0; i < segments.length; i++) {
+      const { point, control } = segments[i];
+      if (distance(point, [x, y]) < pointRadius + 5) {
+        segments.splice(i, 1);
+        return;
+      }
+      if (control && distance(control, [x, y]) < pointRadius + 5) {
+        segments[i].control = null;
+        return;
       }
     }
   }
 });
 
 canvas.addEventListener("mousemove", (e) => {
-  if (!draggingPoint) return;
-  let automationData = getAutomationData();
-  let currentValue = getCurrentValue();
+  if (!dragging) return;
+  const automationData = getAutomationData();
+  const currentValue = getCurrentValue();
+  const segments = automationData[currentValue];
   const [x, y] = getCanvasCoords(e);
-  automationData[currentValue][draggingPoint.index] = [x, y];
-  automationData[currentValue].sort((a, b) => a[0] - b[0]);
+
+  const segment = segments[dragging.segmentIndex];
+  if (dragging.type === "anchor") {
+    segment.point = [x, y];
+    segments.sort((a, b) => a.point[0] - b.point[0]);
+  } else if (dragging.type === "control") {
+    segment.control = [x, y];
+  }
 });
 
 canvas.addEventListener("mouseup", () => {
-  draggingPoint = null;
+  dragging = null;
 });
 
 canvas.addEventListener("mouseleave", () => {
-  draggingPoint = null;
+  dragging = null;
 });
+
+function distance([x1, y1], [x2, y2]) {
+  return Math.hypot(x1 - x2, y1 - y2);
+}

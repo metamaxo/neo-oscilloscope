@@ -1,4 +1,4 @@
-import { settings } from "../settings.js";
+import { settings } from "../settings/settings.js";
 import { canvas } from "./constants.js";
 
 let playheadX = 0;

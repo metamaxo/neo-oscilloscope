@@ -1,4 +1,5 @@
-import { settings } from "../settings.js";
+// automation.js
+import { settings } from "../settings/settings.js";
 import { settingSelect, endX, canvas } from "./constants.js";
 
 let automationData = defaultAutomation();
@@ -20,6 +21,10 @@ export function setCurrentValue(value) {
   currentValue = value;
 }
 
+function createPoint(x, y, control = null) {
+  return { point: [x, y], control };
+}
+
 export function defaultAutomation() {
   let automationData = {
     hue: [],
@@ -27,12 +32,14 @@ export function defaultAutomation() {
     stroke: [],
     persistence: [],
   };
+
   for (const setting in automationData) {
-    let currentValue = getCurrentSettingValue(setting);
-    console.log("current value: {}", currentValue);
-    automationData[setting].push([0, currentValue]);
-    automationData[setting].push([endX, currentValue]);
+    let y = getCurrentSettingValue(setting);
+    const start = createPoint(0, y);
+    const end = createPoint(endX, y, [(0 + endX) / 2, y]);
+    automationData[setting].push(start, end);
   }
+
   return automationData;
 }
 
@@ -57,9 +64,8 @@ export function maybeUpdateAutomation(setting) {
   if (!automationData[setting] || automationData[setting].length > 2) return;
 
   const y = getCurrentSettingValue(setting);
-  console.log("current value: {y}");
   automationData[setting] = [
-    [0, y],
-    [canvas.width, y],
+    createPoint(0, y),
+    createPoint(canvas.width, y, [canvas.width / 2, y]),
   ];
 }
