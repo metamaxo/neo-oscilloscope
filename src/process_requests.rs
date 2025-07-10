@@ -1,7 +1,6 @@
 use crate::JsInterface;
 use crate::backend::process_request::ProcessRequest;
 use crate::backend::processing;
-use crate::image_to_coords::mode::Mode;
 use crate::to_js;
 use log::info;
 use wasm_bindgen::prelude::*;

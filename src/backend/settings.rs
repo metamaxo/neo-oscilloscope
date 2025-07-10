@@ -1,4 +1,4 @@
-use crate::image_to_coords::mode::Mode;
+use crate::image_to_coords::method::Method;
 use crate::traits::{Operation, OperationTrait, RequestTrait};
 use anyhow::Result;
 use serde::Serialize;
@@ -7,13 +7,15 @@ use serde::Serialize;
 #[serde(rename_all = "camelCase")]
 pub struct Settings {
     // Processing
-    pub mode: Mode,
+    pub method: Method,
     pub int_amount: usize,
     pub threshold: u8,
     pub pix_threshold: u32,
     pub sample_rate: u32,
     pub edge_detection: bool,
     pub size: u32,
+    pub spread_type: u32,
+    pub starting_point: (f64, f64),
     // Front end
     pub loop_audio: bool,
     pub repeat: u32,
@@ -34,10 +36,11 @@ pub struct Settings {
 impl Default for Settings {
     fn default() -> Self {
         Settings {
-            mode: Mode::Full,
+            method: Method::Full,
             int_amount: 20,
             threshold: 20,
             pix_threshold: 20,
+            spread_type: 1,
             sample_rate: 44100,
             repeat: 1,
             loop_audio: true,
@@ -45,7 +48,7 @@ impl Default for Settings {
             size: 600,
             edge_detection: true,
             line_color: String::from("#000000"),
-            dot_mode: true,
+            dot_mode: false,
             scale: 300.0,
             stroke: 1.0,
             persistence: 0.05,
@@ -55,6 +58,7 @@ impl Default for Settings {
             centerx: 300.0,
             centery: 300.0,
             clip_length: 10.0,
+            starting_point: (0.0, 0.0),
         }
     }
 }
@@ -81,11 +85,11 @@ impl RequestTrait for GetSettings {
     }
 }
 
-pub struct GetMode;
+pub struct GetMethod;
 
-impl RequestTrait for GetMode {
+impl RequestTrait for GetMethod {
     type State = Settings;
-    type Output = Mode;
+    type Output = Method;
 
     fn into_operation(
         self,
@@ -93,11 +97,11 @@ impl RequestTrait for GetMode {
         Box<dyn OperationTrait<State = Self::State>>,
         futures::channel::oneshot::Receiver<Self::Output>,
     ) {
-        log::info!("setting mode");
+        log::info!("setting method");
         let (tx, rx) = futures::channel::oneshot::channel();
 
         let op = Operation {
-            handler: Box::new(|settings: &mut Settings| settings.mode),
+            handler: Box::new(|settings: &mut Settings| settings.method),
             sender: tx,
         };
 
@@ -105,11 +109,11 @@ impl RequestTrait for GetMode {
     }
 }
 
-pub struct SetMode(pub Mode);
+pub struct SetMethod(pub Method);
 
-impl RequestTrait for SetMode {
+impl RequestTrait for SetMethod {
     type State = Settings;
-    type Output = Mode;
+    type Output = Method;
 
     fn into_operation(
         self,
@@ -121,9 +125,9 @@ impl RequestTrait for SetMode {
         let value = self.0.clone();
         let op = Operation {
             handler: Box::new(move |settings: &mut Settings| {
-                settings.mode = value.clone();
-                log::info!("setting mode to: {}", settings.mode);
-                settings.mode
+                settings.method = value.clone();
+                log::info!("setting method to: {}", settings.method);
+                settings.method
             }),
             sender: tx,
         };
@@ -181,10 +185,12 @@ define_setting_requests! {
     int_amount: usize,
     threshold: u8,
     pix_threshold: u32,
+    spread_type: u32,
     sample_rate: u32,
     repeat: u32,
     playback_rate: f32,
     edge_detection: bool,
+    starting_point: (f64, f64),
     size: u32,
     dot_mode: bool,
     scale: f64,

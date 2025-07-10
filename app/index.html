@@ -17,22 +17,28 @@
       <h1>neo-oscilloscope version 1.0</h1>
     </div>
     <div class="machine">
-      <!-- Title -->
-
       <div class="layout">
         <!-- Visualizer -->
-        <canvas id="oscilloscope" width="600" height="600"></canvas>
+<div class="canvas-wrapper">
+        <div style="position: relative">
+          <canvas id="oscilloscope" width="600" height="600"></canvas>
+          <canvas
+            id="overlayCanvas"
+            width="600"
+            height="600"
+            style="position: absolute; top: 0; left: 0; pointer-events: none"
+          ></canvas>
+        </div>
+          </div>
 
         <!-- Settings Panel -->
         <fieldset class="outer-fieldset">
           <div class="upload-download">
-            <!-- Upload -->
             <div class="button-wrapper">
               <label for="upload" class="custom-button"><b>upload</b></label>
               <input type="file" id="upload" accept="audio/*, image/*" />
             </div>
 
-            <!-- Download -->
             <div class="button-wrapper">
               <button id="downloadAudio" class="custom-button">
                 <b>download</b>
@@ -40,31 +46,23 @@
             </div>
           </div>
 
-          <!-- Flex container for layout -->
           <div class="settings-flex">
-            <!-- LEFT: Draw mode + Style -->
             <div class="left-settings">
-              <!-- Draw mode -->
               <fieldset class="draw-mode-fieldset">
                 <b>mode</b>
                 <div>
-                  <label for="dots">neo-mode</label>
-                  <input
-                    type="radio"
-                    id="dots"
-                    name="drawmode"
-                    value="dots"
-                    checked
-                  />
-
                   <label for="lines">classic-mode</label>
                   <input
                     type="radio"
                     id="lines"
                     name="drawmode"
                     value="lines"
+                    checked
                   />
+                  <label for="dots">neo-mode</label>
+                  <input type="radio" id="dots" name="drawmode" value="dots" />
                 </div>
+
                 <b>canvas settings</b>
                 <div class="slider-row">
                   <label for="hueSlider">hue</label>
@@ -143,7 +141,7 @@
                   />
                 </div>
                 <div class="slider-row">
-                  <label for="center x">center x</label>
+                  <label for="centerX">center x</label>
                   <input
                     type="range"
                     min="0"
@@ -156,7 +154,7 @@
                   />
                 </div>
                 <div class="slider-row">
-                  <label for="centery">center y</label>
+                  <label for="centerY">center y</label>
                   <input
                     type="range"
                     min="0"
@@ -168,59 +166,117 @@
                     autocomplete="off"
                   />
                 </div>
-                <b>image to audio settings</b>
-                <b>method:</b>
-                <select name="methods" id="methods">
-                  <option value="full">full contour</option>
-                  <option value="outline">outline</option>
-                  <option value="scan">scan line</option>
-                  <option value="snake">snake</option>
-                </select>
+              </fieldset>
+            </div>
 
-                <label class="toggle">
-                  <input type="checkbox" id="edgeDetection" checked />
-                  edge detection
-                </label>
+            <div class="method-settings">
+              <fieldset class="method-fieldset">
+                  <fieldset class="method-controls-fieldset">
+                    <div class="method-dropdown">
+                      <select name="methods" id="methods">
+                        <option value="full">all outlines</option>
+                        <option value="outline">outline</option>
+                        <option value="scan">scan line</option>
+                        <option value="snake">snake</option>
+                      </select>
+                    </div>
+                    <div class="direction-pad">
+                      <div id="directionPad">
+                        <button data-dir="nw">↖</button>
+                        <button data-dir="n">↑</button>
+                        <button data-dir="ne">↗</button>
+                        <button data-dir="w">←</button>
+                        <button
+                          id="startPointBtn"
+                          data-dir="center"
+                          title="Pick starting point"
+                        >
+                          ⤢
+                        </button>
+                        <button data-dir="e">→</button>
+                        <button data-dir="sw">↙</button>
+                        <button data-dir="s">↓</button>
+                        <button data-dir="se">↘</button>
+                      </div>
+                  </fieldset>
+                <div class="option-group" data-methods="scan,snake">
+                  <label class="toggle">
+                    <input type="checkbox" id="edgeDetection" checked />
+                    edge detection
+                  </label>
+                </div>
 
-                <div class="slider-row">
-                  <label for="threshold">threshold</label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="500"
-                    value="50"
-                    class="slider"
-                    id="threshold"
-                    step="1"
-                    autocomplete="off"
-                  />
+                <div class="option-group" data-methods="all">
+                  <div class="slider-row">
+                    <label for="threshold">threshold</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="500"
+                      value="50"
+                      class="slider"
+                      id="threshold"
+                      step="1"
+                      autocomplete="off"
+                    />
+                  </div>
                 </div>
-                <div class="slider-row">
-                  <label for="pixThreshold">pixel Threshold</label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="100"
-                    value="50"
-                    class="slider"
-                    id="pixThreshold"
-                    step="1"
-                    autocomplete="off"
-                  />
+
+                <div class="option-group" data-methods="all">
+                  <div class="slider-row">
+                    <label for="intAmount">interpolate</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="100"
+                      value="20"
+                      class="slider"
+                      id="intAmount"
+                      step="1"
+                      autocomplete="off"
+                    />
+                  </div>
                 </div>
-                <div>
+                
+                <div class="option-group" data-methods="scan,snake">
+                  <div class="slider-row">
+                    <label for="pixThreshold">pixel Threshold</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="100"
+                      value="50"
+                      class="slider"
+                      id="pixThreshold"
+                      step="1"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+
+                <div class="option-group" data-methods="scan,snake">
+                  <label for="spreadType">Spread type:</label>
+                  <select name="spreadType" id="spreadType">
+                    <option value="1">square spread</option>
+                    <option value="2">round spread</option>
+                    <option value="3">star spread</option>
+                    <option value="4">horizontal and vertical spread</option>
+                    <option value="5">horizontal spread</option>
+                    <option value="6">vertical spread</option>
+                  </select>
+                </div>
+
+                <div class="option-group" data-methods="all">
                   <label for="repeat">repeat: </label>
                   <input id="repeat" type="number" value="1" min="1" />
                 </div>
-                <div>
-                  <label for="intAmount">interpolate steps: </label>
-                  <input id="intAmount" type="number" value="5" min="0" />
-                </div>
+
               </fieldset>
             </div>
           </div>
         </fieldset>
       </div>
+
       <!-- Automation -->
       <fieldset class="automation-fieldset">
         <div class="automation-container">
@@ -230,18 +286,35 @@
             <option value="scale">scale</option>
             <option value="stroke">stroke</option>
             <option value="persistence">decay</option>
-            <!-- Add more options as needed -->
           </select>
           <button id="clearCanvas" type="button">clear automation</button>
           <label for="clipLength">clip length</label>
           <input id="clipLength" type="number" value="10" />
-
-          <canvas id="automationCanvas" width="1020" height="130"></canvas>
+          <div class="automation-canvas-wrapper">
+          <canvas id="automationCanvas" width="1000" height="120"></canvas>
+            </div>
         </div>
       </fieldset>
     </div>
 
-    <!-- Load JS -->
     <script type="module" src="src/app.js"></script>
+    <script>
+      const methodSelect = document.getElementById("methods");
+      const optionGroups = document.querySelectorAll(".option-group");
+
+      function updateVisibleOptions() {
+        const selectedMethod = methodSelect.value;
+
+        optionGroups.forEach((group) => {
+          const methods = group.dataset.methods.split(",").map((m) => m.trim());
+          const isVisible =
+            methods.includes(selectedMethod) || methods.includes("all");
+          group.style.display = isVisible ? "block" : "none";
+        });
+      }
+
+      methodSelect.addEventListener("change", updateVisibleOptions);
+      updateVisibleOptions(); // on page load
+    </script>
   </body>
 </html>

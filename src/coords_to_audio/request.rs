@@ -1,4 +1,5 @@
 use hound;
+use log::info;
 use std::io::Cursor;
 
 pub struct Request<C: std::ops::Deref<Target = Vec<(f32, f32)>>> {
@@ -13,6 +14,7 @@ pub struct Request<C: std::ops::Deref<Target = Vec<(f32, f32)>>> {
 impl<C: std::ops::Deref<Target = Vec<(f32, f32)>>> Request<C> {
     pub fn process(&mut self) {
         let samples = self.coords.to_vec(); // no resampling here!
+        info!("coords len: {}", self.coords.len());
 
         let spec = hound::WavSpec {
             channels: 2,

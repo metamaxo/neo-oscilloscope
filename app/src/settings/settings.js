@@ -7,6 +7,7 @@ export const settings = {
   edgeDetecion: true,
   size: 300,
   repeat: 1,
+  spreadType: 1,
 
   loopAudio: true,
   playbackRate: 1,

@@ -62,10 +62,15 @@ styleSettings.forEach(({ id, key, setter, events = ["input"] }) => {
   });
 });
 
-document.getElementById("dots").addEventListener("change", async (e) => {
-  try {
-    wasmInterface.set_dot_mode(e.target.checked);
-  } catch (err) {
-    console.error("failed to set edge deteciont");
-  }
+document.querySelectorAll('input[name="drawmode"]').forEach((el) => {
+  el.addEventListener("change", async (e) => {
+    const value = e.target.value; // "lines" or "dots"
+    const isDotMode = value === "dots";
+
+    try {
+      await wasmInterface.set_dot_mode(isDotMode);
+    } catch (err) {
+      console.error("failed to set dot mode");
+    }
+  });
 });

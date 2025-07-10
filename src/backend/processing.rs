@@ -111,7 +111,7 @@ pub fn audio_to_coords(backend: &mut Backend, _args: ProcessArgs) -> Result<()> 
     wasm_bindgen_futures::spawn_local(async move {
         info!("processing audio to coords");
         let mut request = audio_to_coords_request(audio);
-        request.process();
+        let _ = request.process();
         let request = state::SetCoords(Arc::new(request.result));
         let (operation, receiver) = request.into_operation();
         if let Err(e) = backend_tx.send(backend::Request::State(operation)).await {

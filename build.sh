@@ -9,7 +9,7 @@ echo "Building Rust backend to WASM..."
 
 # Build with wasm-pack
 RUSTFLAGS='--cfg getrandom_backend="wasm_js" -C target-feature=+simd128' \
-wasm-pack build --target web --out-dir ./pkg
+  wasm-pack build --target web --out-dir ./app/pkg
 
 echo "Build complete! WASM files generated in pkg/"
 echo ""

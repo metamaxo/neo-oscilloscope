@@ -4,15 +4,13 @@
   box-sizing: border-box;
 }
 
-/* general settingss */
-
 html {
   background-color: black;
   font-size: 14px;
 }
 
 body {
-  background-color: #121212;
+  background: #0c0c1f;
   color: white;
   font-family: "Goldman";
   display: flex;
@@ -22,6 +20,7 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 20px;
+  backdrop-filter: blur(2px);
 }
 
 h1 {
@@ -30,15 +29,26 @@ h1 {
   font-family: "Goldman";
 }
 
+/* == Classic glass machine container == */
 .machine {
-  padding: 10px;
-  border: 10px outset #999999;
-  background-color: #8c8c8c;
+  padding: 15px;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 10px solid transparent;
+  border-radius: 0;
+  border-top-color: rgba(255, 255, 255, 0.4);
+  border-left-color: rgba(255, 255, 255, 0.3);
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+  border-right-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 0 10px rgba(100, 255, 255, 0.15);
 }
 
+/* === Layout === */
 .title {
   margin-top: 100px;
-  color: #999999;
+  color: #e0f7ff;
   display: flex;
   width: 1090px;
   align-items: flex-start;
@@ -51,68 +61,150 @@ h1 {
   align-items: flex-start;
 }
 
-/* visualisation canvas */
-
-#oscilloscope {
-  flex: 1;
+.canvas-wrapper {
   width: 700px;
-  height: 700px;
-  background-color: black;
-  border: 8px inset #999999;
-}
-
-/* upload / download */
-
-.upload-download {
+  height: 700px; /* or 130px for automationCanvas */
+  background: rgba(255, 255, 255, 0.05); /* match .machine style */
+  backdrop-filter: blur(12px);
+  border: 10px solid transparent;
+  border-bottom-color: rgba(255, 255, 255, 0.4);
+  border-right-color: rgba(255, 255, 255, 0.3);
+  border-top-color: rgba(0, 0, 0, 0.3);
+  border-left-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0;
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.button-wrapper {
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   position: relative;
 }
 
-.custom-button {
-  margin-top: 10px;
-  height: 30px;
-  width: 150px;
-  display: inline-block;
-  background-color: #8c8c8c;
-  color: #e6e6e6;
-  font-family: "Goldman";
-  border: 4px outset #999999;
-  cursor: pointer;
-  text-align: center;
-  text-transform: uppercase;
+/* === Oscilloscope Canvas === */
+#oscilloscope {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 680px;
+  height: 680px;
+  border: none;
+}
+#overlayCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  background-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
-input[type="file"] {
-  display: none;
-}
-
-/* settings module */
-
+/* === Sidebar Container === */
 .outer-fieldset {
   flex: 1;
-  align-items: center;
   width: 300px;
   height: 700px;
-  background-color: #8c8c8c;
-  border: 4px solid #8c8c8c;
+  backdrop-filter: blur(12px);
+  border: none;
+  border-radius: 0;
   font-family: "Goldman";
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
+.upload-download {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.button-wrapper {
+  width: 140px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 300;
+}
+
+.custom-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #e6e6e6;
+  font-family: "Goldman";
+  font-size: 14px;
+  border: 6px solid transparent;
+  border-radius: 0;
+  border-top-color: rgba(255, 255, 255, 0.4);
+  border-left-color: rgba(255, 255, 255, 0.3);
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+  border-right-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+/* === Form Elements === */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #b0e0ff;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+input[type="range"] {
+  accent-color: #b0e0ff;
+}
+
+.draw-mode-fieldset {
+  border: none;
+}
+.left-settings,
+.right-advanced,
+.method-settings {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  border: 7px solid transparent;
+  border-radius: 0;
+  border-bottom-color: rgba(255, 255, 255, 0.4);
+  border-right-color: rgba(255, 255, 255, 0.3);
+  border-top-color: rgba(0, 0, 0, 0.35);
+  border-left-color: rgba(0, 0, 0, 0.3);
+  padding: 15px;
+  max-width: 335px;
+  overflow-y: auto;
+}
+
+/* === Canvas Settings Panels === */
+.automation-fieldset {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  border: 7px solid transparent;
+  border-radius: 0;
+  border-bottom-color: rgba(255, 255, 255, 0.4);
+  border-right-color: rgba(255, 255, 255, 0.3);
+  border-top-color: rgba(0, 0, 0, 0.35);
+  border-left-color: rgba(0, 0, 0, 0.3);
+  padding: 15px;
+  overflow-y: auto;
+  margin-top: 15px;
+}
+
+/* === Slider Styles === */
 .slider-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
-  width: 100%;
-  margin-bottom: 10px;
+  margin: 5px 0;
   gap: 10px;
 }
 
@@ -123,19 +215,14 @@ input[type="file"] {
 }
 
 .slider {
-  -webkit-appearance: none;
   appearance: none;
   flex-grow: 1;
-  min-width: 0;
   height: 5px;
-  background: black;
-  outline: none;
-  opacity: 1;
-  border-radius: 0px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
 }
 
 .slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
   appearance: none;
   width: 12px;
   height: 12px;
@@ -154,52 +241,111 @@ input[type="file"] {
   cursor: pointer;
 }
 
-.left-settings fieldset,
-.right-advanced {
-  background-color: #595959;
-  border: 8px inset #999999;
-  padding: 15px;
-  max-height: 635px;
-  overflow-y: auto;
+.method-fieldset {
+  border: none;
 }
 
-.left-settings fieldset legend,
-.right-advanced legend {
-  color: white;
-  padding: 0 6px;
-  font-size: 1rem;
+/* === Method Controls === */
+.method-controls-fieldset {
+  display: flex;
+  flex-direction: row;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
-input[type="checkbox"],
-input[type="radio"] {
-  accent-color: #1a1a1a;
-}
-
-input {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.container {
-  text-align: center;
-}
-
-/* Automation Module */
-
-#automationCanvas {
-  width: 1020px;
-  height: 130px;
-  margin-top: 20px;
+.method-controls {
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  border: 4px inset #404040;
-  background-color: #090b09;
+  border: none;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+#methods {
+  height: 32px;
+  font-size: 14px;
+}
+
+.method-dropdown {
+  height: 32px;
+  width: 170px;
+}
+
+/* === Direction Pad === */
+.direction-pad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100px;
+  height: 100px;
+}
+
+#directionPad {
+  display: grid;
+  grid-template-columns: repeat(3, 33px);
+  grid-template-rows: repeat(3, 33px);
+  gap: 1px;
+  width: 100px;
+  height: 100px;
+}
+
+#directionPad button {
+  background: rgba(255, 255, 255, 0.08);
+  width: 33px;
+  height: 33px;
+  font-size: 16px;
+  color: #e6e6e6;
+  border: 2px solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.4);
+  border-left-color: rgba(255, 255, 255, 0.3);
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+  border-right-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+#directionPad button[data-dir="center"] {
+  cursor: default;
+}
+
+#startPointBtn {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+/* === Automation === */
+#automationCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: none;
+  background: rgba(9, 11, 9, 0.7);
+  backdrop-filter: blur(6px);
   cursor: crosshair;
 }
 
-.automation-fieldset {
-  background-color: #595959;
-  margin-top: 5px;
-  width: 1055px;
+.automation-canvas-wrapper {
+  margin-top: 20px;
+  width: 1000px;
+  height: 120px; /* or 130px for automationCanvas */
+  background: rgba(255, 255, 255, 0.05); /* match .machine style */
+  backdrop-filter: blur(12px);
+  border: 7px solid transparent;
+  border-bottom-color: rgba(255, 255, 255, 0.4);
+  border-right-color: rgba(255, 255, 255, 0.3);
+  border-top-color: rgba(0, 0, 0, 0.3);
+  border-left-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  display: flex;
   align-items: center;
-  border: 8px inset #999999;
+  justify-content: center;
+  padding: 0;
+  position: relative;
 }

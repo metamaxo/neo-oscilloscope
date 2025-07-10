@@ -1,7 +1,7 @@
 use crate::JsInterface;
 use crate::backend::settings::*;
 use crate::backend::state;
-use crate::image_to_coords::mode::Mode;
+use crate::image_to_coords::method::Method;
 use crate::to_js;
 use crate::utils;
 use image::GrayImage;
@@ -67,6 +67,19 @@ impl JsInterface {
     }
 
     #[wasm_bindgen]
+    pub async fn set_spread_type(&mut self, value: JsValue) -> Result<(), JsValue> {
+        self.inner
+            .settings(SetSpreadType(
+                value
+                    .as_f64()
+                    .ok_or_else(|| JsValue::from_str("Expected a number"))? as u32,
+            ))
+            .await
+            .map_err(to_js)?;
+        Ok(())
+    }
+
+    #[wasm_bindgen]
     pub async fn set_repeat(&mut self, value: JsValue) -> Result<(), JsValue> {
         self.inner
             .settings(SetRepeat(
@@ -74,6 +87,21 @@ impl JsInterface {
                     .as_f64()
                     .ok_or_else(|| JsValue::from_str("Expected a number"))? as u32,
             ))
+            .await
+            .map_err(to_js)?;
+        Ok(())
+    }
+
+    #[wasm_bindgen]
+    pub async fn set_starting_point(&mut self, x: JsValue, y: JsValue) -> Result<(), JsValue> {
+        info!("setting starting point: {:?}, {:?}", x, y);
+        self.inner
+            .settings(SetStartingPoint((
+                x.as_f64()
+                    .ok_or_else(|| JsValue::from_str("Expected a number"))?,
+                y.as_f64()
+                    .ok_or_else(|| JsValue::from_str("Expected a number"))?,
+            )))
             .await
             .map_err(to_js)?;
         Ok(())
@@ -94,9 +122,12 @@ impl JsInterface {
     }
 
     #[wasm_bindgen]
-    pub async fn set_mode(&mut self, value: &str) -> Result<(), JsValue> {
-        let mode = Mode::try_from(value).expect("unknow mode");
-        self.inner.settings(SetMode(mode)).await.map_err(to_js)?;
+    pub async fn set_method(&mut self, value: &str) -> Result<(), JsValue> {
+        let method = Method::try_from(value).expect("unknow method");
+        self.inner
+            .settings(SetMethod(method))
+            .await
+            .map_err(to_js)?;
         Ok(())
     }
 
@@ -268,7 +299,8 @@ impl JsInterface {
             .map_err(to_js)
             .ok();
         info!("image to backend ok");
-        self.inner.settings(SetSize(size)).await.map_err(to_js);
+        info!("size is: {}", size);
+        let _ = self.inner.settings(SetSize(size)).await.map_err(to_js);
         Ok(())
     }
 }

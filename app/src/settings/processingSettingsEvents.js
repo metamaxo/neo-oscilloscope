@@ -23,6 +23,12 @@ const processingSettings = [
     setter: (v) => wasmInterface.set_int_amount(v),
     events: ["input", "change"],
   },
+  {
+    id: "spreadType",
+    key: "spread",
+    setter: (v) => wasmInterface.set_spread_type(v),
+    events: ["input", "change"],
+  },
 ];
 
 processingSettings.forEach(({ id, key, setter, events = ["input"] }) => {
@@ -32,8 +38,12 @@ processingSettings.forEach(({ id, key, setter, events = ["input"] }) => {
       const value = parseFloat(el.value, 10);
       if (!Number.isNaN(value)) {
         await setter(value);
-        await wasmInterface.process_image_to_coords();
-        await wasmInterface.process_coords_to_audio();
+        try {
+          await wasmInterface.process_image_to_coords();
+          await wasmInterface.process_coords_to_audio();
+        } catch (err) {
+          console.error("failed to process coords to audio");
+        }
       }
     });
   });
@@ -43,7 +53,9 @@ const method = document.getElementById("methods");
 method.addEventListener("change", async (event) => {
   const selectedValue = event.target.value;
   try {
-    await wasmInterface.set_mode(selectedValue);
+    await wasmInterface.set_method(selectedValue);
+    await wasmInterface.process_image_to_coords();
+    await wasmInterface.process_coords_to_audio();
   } catch (err) {
     console.error("Failed to set mode:", err);
   }

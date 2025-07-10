@@ -1,4 +1,3 @@
-mod algs;
-pub mod mode;
+pub mod method;
+mod methods;
 pub mod request;
-mod utils;

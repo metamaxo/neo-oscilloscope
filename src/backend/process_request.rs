@@ -17,10 +17,11 @@ where
     Im: std::ops::Deref<Target = GrayImage>,
 {
     ImageToCoordsRequest {
-        mode: settings.mode,
+        method: settings.method,
         image: img,
         threshold: settings.threshold,
         pix_threshold: settings.pix_threshold,
+        spread_type: settings.spread_type,
         result: Vec::new(),
         interpolate: settings.int_amount > 0,
         int_amount: settings.int_amount,
@@ -34,10 +35,11 @@ where
     Im: std::ops::Deref<Target = GrayImage>,
 {
     ImageToCoordsRequest {
-        mode: settings.mode,
+        method: settings.method,
         image: img,
         threshold: settings.threshold,
         pix_threshold: 0,
+        spread_type: settings.spread_type,
         result: Vec::new(),
         interpolate: false,
         int_amount: 0,
