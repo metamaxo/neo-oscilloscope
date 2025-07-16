@@ -104,14 +104,14 @@ impl JsInterface {
     #[wasm_bindgen]
     pub async fn get_center_x(&mut self) -> Result<JsValue, JsValue> {
         Ok(JsValue::from(
-            self.inner.settings(GetCenterx).await.map_err(to_js)? as f64,
+            self.inner.settings(GetCenterX).await.map_err(to_js)? as f64,
         ))
     }
 
     #[wasm_bindgen]
     pub async fn get_center_y(&mut self) -> Result<JsValue, JsValue> {
         Ok(JsValue::from(
-            self.inner.settings(GetCentery).await.map_err(to_js)? as f64,
+            self.inner.settings(GetCenterY).await.map_err(to_js)? as f64,
         ))
     }
 

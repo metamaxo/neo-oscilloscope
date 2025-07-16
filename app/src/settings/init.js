@@ -3,7 +3,7 @@ import { wasmInterface } from "../wasm.js";
 import { updateState } from "../state.js";
 import "./processingSettingsEvents.js";
 import "./styleSettingsEvents.js";
-import "./startingPoint.js";
+import "./directionPad.js";
 
 let interval = 100; // ms
 while (true) {

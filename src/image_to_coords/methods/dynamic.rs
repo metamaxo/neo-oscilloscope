@@ -1,9 +1,10 @@
 use crate::image_to_coords::methods::utils::MOORE_DIRS;
 use crate::image_to_coords::request::Request;
 use image::GrayImage;
+use log::info;
 
 impl<Im: std::ops::Deref<Target = GrayImage>> Request<Im> {
-    pub fn trace_full_contour_from(
+    pub fn trace_full_contour(
         &mut self,
         start: (u32, u32),
         visited: &mut [Vec<bool>],
@@ -51,24 +52,46 @@ impl<Im: std::ops::Deref<Target = GrayImage>> Request<Im> {
         }
     }
 
-    /// Find every contour. If the pixel is black and borders white pixels, it gets added to the vec.
-    /// We can adjust the level of detail with the pix threshold variable to get the desired result.
-    pub fn trace_all_outlines(&mut self) -> Vec<Vec<(u32, u32)>> {
+    pub fn dynamic_contour_parser(&mut self) -> Vec<Vec<(u32, u32)>> {
         let mut visited = vec![vec![false; self.size as usize]; self.size as usize];
+        let origin = self.get_starting_point();
         let mut contours = vec![];
+        let directions = self.get_dirs();
+        // Track position per direction
+        let mut positions: Vec<(i32, i32)> = directions
+            .iter()
+            .map(|(dx, dy)| (origin.0 as i32 + dx, origin.1 as i32 + dy))
+            .collect();
 
-        for y in 0..self.size {
-            for x in 0..self.size {
-                if self.check_pixel(x, y) && !visited[x as usize][y as usize] {
-                    let mut contour = vec![];
-                    self.trace_full_contour_from((x, y), &mut visited, &mut contour);
-                    if contour.len() > 1 {
-                        contours.push(contour);
+        loop {
+            let mut all_out_of_bounds = true;
+
+            for (i, (dx, dy)) in directions.iter().enumerate() {
+                let (nx, ny) = positions[i];
+                info!("parsing: {}{}", nx, ny);
+
+                if nx >= 0 && ny >= 0 && nx < self.size as i32 && ny < self.size as i32 {
+                    all_out_of_bounds = false;
+                    let ux = nx as u32;
+                    let uy = ny as u32;
+
+                    if self.is_edge(ux, uy) && !visited[ux as usize][uy as usize] {
+                        let mut contour = vec![];
+                        self.trace_full_contour((ux, uy), &mut visited, &mut contour);
+                        if contour.len() > 1 {
+                            contours.push(contour);
+                        }
                     }
+
+                    // Step forward in this direction
+                    positions[i] = (nx + dx, ny + dy);
                 }
             }
-        }
 
+            if all_out_of_bounds {
+                break;
+            }
+        }
         contours
     }
 }

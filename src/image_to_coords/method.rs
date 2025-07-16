@@ -11,6 +11,8 @@ pub enum Method {
     Scan,
     Snake,
     Black,
+    Dynamic,
+    Zigzag,
 }
 
 /// Implement Display for Method
@@ -29,6 +31,8 @@ impl From<Method> for &str {
             Method::Scan => "scan",
             Method::Snake => "snake",
             Method::Black => "black",
+            Method::Dynamic => "dynamic",
+            Method::Zigzag => "zigzag",
         }
     }
 }
@@ -44,6 +48,8 @@ impl TryFrom<&str> for Method {
             _ if value.contains("scan") => Self::Scan,
             _ if value.contains("snake") => Self::Snake,
             _ if value.contains("black") => Self::Black,
+            _ if value.contains("dynamic") => Self::Dynamic,
+            _ if value.contains("zigzag") => Self::Zigzag,
             _ => return Err(()),
         })
     }

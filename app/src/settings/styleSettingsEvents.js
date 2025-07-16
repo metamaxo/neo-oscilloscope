@@ -62,6 +62,11 @@ styleSettings.forEach(({ id, key, setter, events = ["input"] }) => {
   });
 });
 
+const clipLength = document.getElementById("clipLength");
+clipLength.addEventListener("change", async (event) => {
+  await wasmInterface.set_clip_length(parseInt(clipLength.value));
+});
+
 document.querySelectorAll('input[name="drawmode"]').forEach((el) => {
   el.addEventListener("change", async (e) => {
     const value = e.target.value; // "lines" or "dots"

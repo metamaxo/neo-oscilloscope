@@ -9,15 +9,21 @@
       href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="styles/style.css" rel="stylesheet" />
   </head>
 
   <body>
+<input type="color" id="bgColorPicker" title="Pick background color" style="position: absolute; top: 10px; right: 10px; z-index: 1000;" />
     <div class="title">
       <h1>neo-oscilloscope version 1.0</h1>
     </div>
     <div class="machine">
       <div class="layout">
+<label style="position: absolute; top: 50px; right: 10px; z-index: 1000; color: white; font-family: 'Goldman'; font-size: 12px;">
+  <input type="checkbox" id="transparencyToggle" checked />
+  Enable Transparency
+</label>
         <!-- Visualizer -->
 <div class="canvas-wrapper">
         <div style="position: relative">
@@ -26,7 +32,7 @@
             id="overlayCanvas"
             width="600"
             height="600"
-            style="position: absolute; top: 0; left: 0; pointer-events: none"
+            style="position: absolute; top: 0; left: 0;"
           ></canvas>
         </div>
           </div>
@@ -128,7 +134,7 @@
                   />
                 </div>
                 <div class="slider-row">
-                  <label for="imageOpacity">image opacity</label>
+                  <label for="imageOpacity">mask opacity</label>
                   <input
                     type="range"
                     min="0"
@@ -178,27 +184,25 @@
                         <option value="outline">outline</option>
                         <option value="scan">scan line</option>
                         <option value="snake">snake</option>
+                        <option value="dynamic">dynamic</option>
+                        <option value="zigzag">zigzag</option>
                       </select>
                     </div>
                     <div class="direction-pad">
                       <div id="directionPad">
-                        <button data-dir="nw">↖</button>
-                        <button data-dir="n">↑</button>
-                        <button data-dir="ne">↗</button>
-                        <button data-dir="w">←</button>
-                        <button
-                          id="startPointBtn"
-                          data-dir="center"
-                          title="Pick starting point"
-                        >
-                          ⤢
-                        </button>
-                        <button data-dir="e">→</button>
-                        <button data-dir="sw">↙</button>
-                        <button data-dir="s">↓</button>
-                        <button data-dir="se">↘</button>
+                        <button data-dir="8"><b>↖</b></button>
+                        <button data-dir="1"><b>↑</b></button>
+                        <button data-dir="2"><b>↗</b></button>
+                        <button data-dir="7"><b>←</b></button>
+                        <button id="startPointBtn" data-dir="center" title="✓"><b>⌖</b></buttonid>
+                        <button data-dir="3"><b>→</b></button>
+                        <button data-dir="6"><b>↙</b></button>
+                        <button data-dir="5"><b>↓</b></button>
+                        <button data-dir="4"><b>↘</b></button>
                       </div>
+                    </div>
                   </fieldset>
+
                 <div class="option-group" data-methods="scan,snake">
                   <label class="toggle">
                     <input type="checkbox" id="edgeDetection" checked />
@@ -206,13 +210,34 @@
                   </label>
                 </div>
 
+                <div class="option-group" data-methods="zigzag">
+                  <label class="toggle">
+                    <input type="checkbox" id="horizontal" checked />
+                    horizontal
+                  </label>
+                </div>
+                
+                <div class="option-group" data-methods="full">
+                  <label class="toggle">
+                    <input type="checkbox" id="doubleTrace" />
+                    double trace
+                  </label>
+                </div>
+                
+                <div class="option-group" data-methods="all">
+                  <label class="toggle">
+                    <input type="checkbox" id="scramble" />
+                    scramble
+                  </label>
+                </div>
+
                 <div class="option-group" data-methods="all">
                   <div class="slider-row">
-                    <label for="threshold">threshold</label>
+                    <label for="threshold">black threshold</label>
                     <input
                       type="range"
                       min="1"
-                      max="500"
+                      max="255"
                       value="50"
                       class="slider"
                       id="threshold"
@@ -227,7 +252,7 @@
                     <label for="intAmount">interpolate</label>
                     <input
                       type="range"
-                      min="1"
+                      min="0"
                       max="100"
                       value="20"
                       class="slider"
@@ -253,6 +278,28 @@
                     />
                   </div>
                 </div>
+                
+                <div class="option-group" data-methods="snake">
+                  <label for="repeat">snake step: </label>
+                  <input id="snakeStep" type="number" value="1" min="1" />
+                </div>
+                
+                <div class="option-group" data-methods="scan">
+                  <label for="spreadType">scan y direction</label>
+                  <select name="spreadType" id="scanType">
+                    <option value="3">linear</option>
+                    <option value="1">outwards</option>
+                    <option value="2">inwards</option>
+                  </select>
+                </div>
+                
+                <div class="option-group" data-methods="scan">
+                  <label for="spreadType">scan x direction</label>
+                  <select name="spreadType" id="scanLineType">
+                    <option value="1">outwards</option>
+                    <option value="2">inwards</option>
+                  </select>
+                </div>
 
                 <div class="option-group" data-methods="scan,snake">
                   <label for="spreadType">Spread type:</label>
@@ -264,6 +311,11 @@
                     <option value="5">horizontal spread</option>
                     <option value="6">vertical spread</option>
                   </select>
+                </div>
+
+                <div class="option-group" data-methods="all">
+                  <label for="repeat">edge threshold: </label>
+                  <input id="edgeThreshold" type="number" value="2" min="1" />
                 </div>
 
                 <div class="option-group" data-methods="all">
@@ -315,6 +367,15 @@
 
       methodSelect.addEventListener("change", updateVisibleOptions);
       updateVisibleOptions(); // on page load
+  const bgColorPicker = document.getElementById("bgColorPicker");
+
+  bgColorPicker.addEventListener("input", (e) => {
+    document.body.style.backgroundColor = e.target.value;
+  });
+  const toggle = document.getElementById("transparencyToggle");
+  toggle.addEventListener("change", () => {
+    document.body.classList.toggle("no-transparency", !toggle.checked);
+  });
     </script>
   </body>
 </html>

@@ -3,7 +3,7 @@ use crate::image_to_coords::request::Request;
 use image::GrayImage;
 
 impl<Im: std::ops::Deref<Target = GrayImage>> Request<Im> {
-    pub fn trace_snake(&self) -> Vec<(u32, u32)> {
+    pub fn trace_snake(&mut self) -> Vec<(u32, u32)> {
         let mut contours = Vec::new();
 
         let mut x = self.size / 2;
@@ -13,7 +13,19 @@ impl<Im: std::ops::Deref<Target = GrayImage>> Request<Im> {
         let directions = [(0, -1), (-1, 0), (0, 1), (1, 0)];
         let mut dir = 0;
 
-        let mut steps = 1;
+        let start_direction = self.get_dirs();
+
+        if !start_direction.is_empty() {
+            match start_direction[0] {
+                (0, -1) => dir = 0,
+                (-1, 0) => dir = 1,
+                (0, 1) => dir = 2,
+                (1, 0) => dir = 3,
+                _ => dir = 0,
+            }
+        }
+
+        let mut steps = self.snake_step_amount;
 
         if self.check_pixel(x, y) {
             contours.push((x, y));

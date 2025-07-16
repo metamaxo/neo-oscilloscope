@@ -13,6 +13,29 @@ pub const MOORE_DIRS: [(i32, i32); 8] = [
 ];
 
 impl<Im: std::ops::Deref<Target = GrayImage>> Request<Im> {
+    pub fn get_dirs(&mut self) -> Vec<(i32, i32)> {
+        let mut dirs: Vec<(i32, i32)> = Vec::new();
+        match &self.directions {
+            Some(directions) => {
+                for direction in directions {
+                    match direction {
+                        1 => dirs.push((0, -1)),
+                        2 => dirs.push((1, -1)),
+                        3 => dirs.push((1, 0)),
+                        4 => dirs.push((1, 1)),
+                        5 => dirs.push((0, 1)),
+                        6 => dirs.push((-1, 1)),
+                        7 => dirs.push((-1, 0)),
+                        8 => dirs.push((-1, -1)),
+                        _ => {}
+                    }
+                }
+                dirs
+            }
+            None => dirs,
+        }
+    }
+
     #[inline(always)]
     pub fn is_black(&self, x: u32, y: u32) -> bool {
         if let Some(pixel) = self.image.get_pixel_checked(x, y) {
@@ -24,6 +47,7 @@ impl<Im: std::ops::Deref<Target = GrayImage>> Request<Im> {
 
     #[inline(always)]
     pub fn is_edge(&self, x: u32, y: u32) -> bool {
+        let mut edge_count = 0;
         if !self.is_black(x, y) {
             return false;
         }
@@ -36,7 +60,10 @@ impl<Im: std::ops::Deref<Target = GrayImage>> Request<Im> {
                 && (ny as u32) < self.size
                 && self.image.get_pixel(nx as u32, ny as u32)[0] >= self.threshold
             {
-                return true;
+                edge_count += 1;
+                if edge_count == self.edge_threshold {
+                    return true;
+                }
             }
         }
         false
@@ -49,35 +76,12 @@ impl<Im: std::ops::Deref<Target = GrayImage>> Request<Im> {
         }
     }
 
-    /// Divide point map by height & width to create floats, we need these for generating audio.
-    pub fn normalize(&self, outline: &[(u32, u32)]) -> Vec<(f32, f32)> {
-        outline
-            .iter()
-            .map(|(x, y)| {
-                (
-                    (*x as f32 / self.size as f32) * 2.0 - 1.0, // X in [-1.0, 1.0]
-                    (*y as f32 / self.size as f32) * 2.0 - 1.0, // Y in [-1.0, 1.0]
-                )
-            })
-            .collect()
-    }
-
-    // simple interpolation for coords
-    pub fn interpolate(&self, coords: &[(f32, f32)]) -> Vec<(f32, f32)> {
-        let mut result = Vec::new();
-        match self.interpolate {
-            true => {
-                for i in 0..coords.len() {
-                    let (x0, y0) = coords[i];
-                    let (x1, y1) = coords[(i + 1) % coords.len()];
-                    for j in 0..self.int_amount {
-                        let t = j as f32 / self.int_amount as f32;
-                        result.push((x0 + t * (x1 - x0), y0 + t * (y1 - y0)));
-                    }
-                }
-                result
-            }
-            false => coords.to_vec(),
-        }
+    pub fn get_starting_point(&self) -> (u32, u32) {
+        log::info!("starting point: {:?}", self.starting_point);
+        let (x, y) = self.starting_point;
+        let nx = (x as f32 / self.canvas_size as f32) * self.size as f32;
+        let ny = (y as f32 / self.canvas_size as f32) * self.size as f32;
+        log::info!("nx = {}, ny = {}", nx, ny);
+        (nx as u32, ny as u32)
     }
 }

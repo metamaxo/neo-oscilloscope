@@ -33,6 +33,7 @@ impl JsInterface {
         Float32Array::from(result.as_slice())
     }
 }
+
 pub fn convert_to_canvas_size(image: &GrayImage) -> (GrayImage, u32) {
     let (height, width) = image.dimensions();
     match height > width {

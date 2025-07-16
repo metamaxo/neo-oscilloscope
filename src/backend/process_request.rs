@@ -1,6 +1,7 @@
 use crate::audio_to_coords::request::Request as AudioToCoordsRequest;
 use crate::backend::settings::Settings;
 use crate::coords_to_audio::request::Request as CoordsToAudioRequest;
+use crate::image_to_coords::method::Method;
 use crate::image_to_coords::request::Request as ImageToCoordsRequest;
 use image::GrayImage;
 
@@ -27,6 +28,17 @@ where
         int_amount: settings.int_amount,
         size: settings.size,
         edge_detection: settings.edge_detection,
+        canvas_size: settings.canvas_size,
+        scan_type: settings.scan_type,
+        scanline_type: settings.scanline_type,
+        starting_point: settings.starting_point,
+        snake_step_amount: settings.snake_step_amount,
+        directions: settings.directions.clone(),
+        horizontal: settings.horizontal,
+        scramble: settings.scramble,
+        double_trace: settings.double_trace,
+        edge_threshold: settings.edge_threshold,
+        flatten: settings.flatten,
     }
 }
 
@@ -35,7 +47,7 @@ where
     Im: std::ops::Deref<Target = GrayImage>,
 {
     ImageToCoordsRequest {
-        method: settings.method,
+        method: Method::Black,
         image: img,
         threshold: settings.threshold,
         pix_threshold: 0,
@@ -45,6 +57,17 @@ where
         int_amount: 0,
         size: settings.size,
         edge_detection: false,
+        canvas_size: settings.canvas_size,
+        starting_point: settings.starting_point,
+        snake_step_amount: 1,
+        scan_type: 1,
+        scanline_type: 1,
+        directions: None,
+        horizontal: true,
+        scramble: false,
+        double_trace: false,
+        edge_threshold: settings.edge_threshold,
+        flatten: false,
     }
 }
 
